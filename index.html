@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#120d2d">
+<meta name="description" content="The Great Star Race: a live, pixel-art GitHub star showdown between DroidDeck and Winlator. Updates every 60 seconds.">
+<meta property="og:title" content="THE GREAT STAR RACE ★ DroidDeck vs Winlator">
+<meta property="og:description" content="Two projects. One finish line. Live GitHub star counts every minute.">
+<title>★ The Great Star Race — DroidDeck vs Winlator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#100d2a;--panel:#211746;--panel2:#251b50;--edge:#6d55a2;--white:#fff9ff;--muted:#aaa2d1;--pink:#ff487f;--pink2:#ff789b;--blue:#54d8ff;--gold:#ffde71;--green:#5ef5b0}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--white);background:radial-gradient(ellipse at 50% 0%,#352065 0%,#15102f 46%,#0d0b20 100%);font:500 16px/1.5 'Space Grotesk',system-ui,sans-serif;min-height:100vh}button,a{font:inherit}a{color:inherit}button{cursor:pointer}button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offset:4px}.pixel{font-family:'Press Start 2P',monospace;letter-spacing:-.04em;line-height:1.65}.shell{max-width:1230px;padding:0 24px;margin:auto}
+.topbar{height:72px;border-bottom:2px solid #6e3b9b;background:#110d29dd;backdrop-filter:blur(14px);position:relative;z-index:3}
+.nav{display:flex;align-items:center;justify-content:space-between;height:100%;gap:20px}.brand{text-decoration:none;display:flex;align-items:center;gap:14px;font-weight:800;letter-spacing:.03em}.brand-emblem{width:36px;height:36px;background:var(--gold);color:#29102b;display:grid;place-items:center;box-shadow:4px 4px 0 #ac6582;border:2px solid #fff5b5;font-size:20px;transform:rotate(-7deg)}.nav-links{display:flex;align-items:center;gap:23px}.nav-links a{text-decoration:none;font-size:13px;color:#c9c2e9;font-weight:700}.nav-links a:hover{color:var(--gold)}.signal{display:flex;align-items:center;gap:9px;border:1px solid #4c815f;border-radius:4px;color:var(--green);background:#18392d;padding:8px 12px;font-size:11px;font-weight:800;letter-spacing:.1em}.signal i{width:8px;height:8px;border-radius:50%;background:currentColor;box-shadow:0 0 10px currentColor;animation:blink 1.8s ease-in-out infinite}@keyframes blink{50%{opacity:.35}}.signal.stale{color:var(--gold);border-color:#856d37;background:#332b28}
+.hero{padding-top:34px}.eyebrow{text-align:center;font:700 12px/1.5 'Space Grotesk',sans-serif;letter-spacing:.24em;color:#e4beff;text-transform:uppercase}.hero-title{text-align:center;margin:8px 0 2px;color:var(--gold);font-size:clamp(22px,4vw,50px);text-shadow:0 5px 0 #8a3870,0 10px 0 #3c1b53,0 0 32px #f8777244}.intro{text-align:center;margin:13px auto 18px;color:#d6cbed;max-width:680px;font-size:16px}.intro strong{color:#fff}
+.marquise{position:relative;border:4px solid #9d69e4;background:#352069;box-shadow:0 0 0 3px #201035,0 12px 0 #0b0822,0 22px 36px #0007;overflow:hidden}.marquise:before{content:"";position:absolute;inset:0;pointer-events:none;z-index:2;border:5px solid #ffffff19}.sky-caption{position:absolute;top:18px;left:22px;z-index:2;background:#130d2ac9;border:2px solid #fff5;padding:10px 13px;font:700 10px 'Press Start 2P',monospace;color:#fff;box-shadow:4px 4px 0 #0005}.sky-caption span{color:var(--gold)}
+canvas#racetrack{display:block;width:100%;aspect-ratio:640 / 245;min-height:230px;max-height:440px;image-rendering:pixelated;background:#34206a}
+.finishtag{position:absolute;right:20px;top:18px;z-index:2;transform:rotate(4deg);border:3px solid #ffea86;padding:9px 13px;background:#4e246d;box-shadow:4px 5px 0 #1d123d;color:var(--gold);font-size:10px;text-align:center}.finishtag strong{font-size:15px}
+.race-ribbon{position:relative;display:flex;justify-content:center;align-items:center;gap:20px;width:max-content;max-width:94%;padding:12px 22px;margin:-19px auto 0;background:#f5427c;border:3px solid #ffd788;box-shadow:0 6px 0 #79275d,0 10px 25px #0401169c;z-index:2;text-align:center;font-weight:900;font-size:clamp(14px,2vw,24px);text-shadow:2px 3px 0 #842457;transform:rotate(-1deg)}.race-ribbon .star{color:var(--gold)}
+.scoreboard{display:grid;grid-template-columns:1fr 1fr .65fr;gap:15px;margin:39px 0 16px}.tile{padding:21px 24px 19px;position:relative;border:2px solid #73529e;background:linear-gradient(125deg,#302050,#1b153a);box-shadow:5px 5px 0 #0c0920;overflow:hidden}.tile:after{position:absolute;content:'✦';top:-34px;right:6px;font-size:115px;opacity:.08}.tile.pink{border-color:#f46c9a;background:linear-gradient(115deg,#64204f,#321641 80%);box-shadow:5px 5px 0 #7e2854,0 0 18px #ff487f27}.tile.blue{border-color:#59c8ff;background:linear-gradient(115deg,#1a426d,#192446 80%);box-shadow:5px 5px 0 #265584,0 0 18px #54d8ff22}.tile.yellow{border-color:#efb969;background:linear-gradient(115deg,#5f3855,#33203c);box-shadow:5px 5px 0 #7f4d58}.tile-label{display:flex;align-items:center;gap:11px;font-weight:800;font-size:19px}.tile .icon{display:grid;place-items:center;width:35px;height:35px;border:2px solid currentColor;font-size:20px}.tile.pink .icon{color:var(--pink2)}.tile.blue .icon{color:var(--blue)}.tile.yellow .icon{color:var(--gold)}.tile-value{font:700 clamp(19px,3vw,36px)/1.4 'Press Start 2P',monospace;color:var(--gold);margin-top:14px;text-shadow:3px 4px 0 #4f2247;white-space:nowrap;letter-spacing:-.055em}.tile-value .suffix{font:700 13px 'Space Grotesk',sans-serif;color:#fff;letter-spacing:normal}.tile-note{font-size:12px;color:#e5cde5;margin-top:8px;font-weight:700}.tile.yellow .tile-value{font-size:clamp(18px,2.5vw,32px)}
+.lower{display:grid;grid-template-columns:1.48fr 1fr;gap:15px;margin-top:18px}.panel{border:2px solid #69559d;background:linear-gradient(145deg,#241945,#171332);padding:22px 24px;box-shadow:5px 5px 0 #0b0920}.panel h2{font-size:15px;line-height:1.5;margin:0 0 18px;display:flex;align-items:center;gap:10px}.panel h2 .gem{color:var(--gold)}.track-row{display:grid;grid-template-columns:108px 1fr 82px;align-items:center;gap:15px;margin:18px 0;font-size:13px;font-weight:700}.track-row .bar{height:22px;background:#0d102c;border:2px solid #74659d;box-shadow:inset 2px 2px 0 #070716;overflow:hidden}.track-row .fill{height:100%;width:50%;transition:width 1s;position:relative}.fill.dd{background:repeating-linear-gradient(120deg,#fb3c79 0 11px,#ff7199 11px 17px)}.fill.win{background:repeating-linear-gradient(120deg,#2699e9 0 11px,#61dbff 11px 17px)}.right-val{text-align:right;font-weight:800}.panel-footer{font-size:12px;color:var(--muted);margin-top:17px}.forecast{display:flex;flex-direction:column;justify-content:space-between}.forecast .big{font:700 clamp(16px,2.5vw,23px)/1.5 'Press Start 2P',monospace;color:var(--gold);text-shadow:2px 3px 0 #743e48;margin:10px 0}.forecast p{font-size:13px;color:#bfb2dc;margin:0}.forecast .detail{border-top:1px solid #59487e;padding-top:11px;margin-top:15px;font-size:12px;color:#ded4f3}
+.middle{display:grid;grid-template-columns:1fr 1fr 1fr;gap:15px;margin-top:17px}.mini{padding:19px 21px}.mini .key{color:#bdb4df;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}.mini .amount{font-weight:800;font-size:25px;margin:6px 0;color:white}.mini .sub{font-size:11px;color:#a7a0c5}.accent{color:var(--green)!important}
+.timeline{margin:18px 0 0;padding:22px 24px}.timeline .mile{display:flex;justify-content:space-between;gap:9px;align-items:center;position:relative;margin:20px 0 9px}.timeline .mile:before{content:"";position:absolute;left:12px;right:12px;top:12px;height:4px;background:#7766a7}.point{position:relative;z-index:1;text-align:center;width:25%;font-weight:800;font-size:12px}.point .dot{width:26px;height:26px;background:#2c2355;border:4px solid #c1a5fc;margin:0 auto 11px;box-shadow:0 0 0 4px #20173c}.point.done .dot{background:var(--green);border-color:#d3ffe7}.point.current .dot{background:#ffd563;border-color:#fff3b5;box-shadow:0 0 20px #ffbe63}.point small{display:block;font-size:10px;color:#9d97bd}.point.done{color:var(--green)}.point.current{color:var(--gold)}
+.footer{display:flex;align-items:center;justify-content:space-between;gap:20px;padding-top:27px;padding-bottom:42px;color:#a7a0c2;font-size:12px}.footer a{color:#d4ccf7}.actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.btn{border:2px solid #a581db;background:#39215e;box-shadow:3px 3px 0 #0b091e;border-radius:2px;color:#fff;font-weight:800;font-size:12px;padding:10px 14px;transition:transform .15s}.btn:hover{transform:translateY(-2px);background:#4f2e77}.btn.main{background:#f0407b;border-color:#ff9ab4}.btn:disabled{opacity:.5;cursor:not-allowed}.updating{animation:blink 1s infinite}
+#celebration{pointer-events:none;position:fixed;inset:0;width:100%;height:100%;z-index:10;display:none}
+.announcement{display:none;position:fixed;z-index:11;top:16%;left:50%;transform:translateX(-50%) rotate(-2deg);width:min(90vw,720px);background:#ffcd5b;border:6px solid #fff6ba;box-shadow:9px 10px 0 #8c3e85,0 0 100px #ffba466e;padding:28px;color:#49203c;text-align:center}.announcement .pixel{font-size:clamp(17px,3.4vw,35px)}.announcement p{font-weight:800}.announcement button{border:2px solid #592446;background:#d73670;color:white;padding:10px 20px;font-weight:800}
+@media(max-width:820px){.nav-links{display:none}.scoreboard{grid-template-columns:1fr 1fr}.tile.yellow{grid-column:1/-1}.lower{grid-template-columns:1fr}.middle{grid-template-columns:1fr 1fr}.sky-caption{font-size:8px}.hero-title{line-height:1.6}}
+@media(max-width:560px){.shell{padding:0 13px}.topbar{height:60px}.brand{font-size:12px}.signal{padding:7px;font-size:9px}.hero{padding-top:22px}.hero-title{font-size:25px}.intro{font-size:13px}.finishtag{top:10px;right:8px;font-size:7px}.finishtag strong{font-size:9px}.sky-caption{top:10px;left:8px;font-size:7px;padding:7px}.marquise{border-width:3px}canvas#racetrack{min-height:190px;object-fit:cover}.scoreboard{gap:9px;margin-top:31px}.tile{padding:13px}.tile-label{font-size:14px}.tile .icon{width:25px;height:25px;font-size:15px}.tile-value{font-size:18px}.tile-note{font-size:10px}.panel{padding:16px}.track-row{grid-template-columns:75px 1fr 69px;gap:8px;font-size:11px}.middle{grid-template-columns:1fr 1fr;gap:9px}.mini .amount{font-size:18px}.point{font-size:9px}.point small{font-size:9px}.footer{flex-direction:column;align-items:flex-start}.race-ribbon{font-size:13px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<canvas id="celebration" aria-hidden="true"></canvas>
+<div id="announcement" class="announcement" role="dialog" aria-modal="true" aria-label="Race celebration"><div class="pixel" id="announce-title">WINNER!</div><p id="announce-body"></p><button id="close-banner">AWESOME! ★</button></div>
+<header class="topbar"><nav class="nav shell"><a class="brand" href="#top"><span class="brand-emblem">★</span><span>THE STAR RACE</span></a><div class="nav-links"><a href="#race">THE RACE</a><a href="#standings">STANDINGS</a><a href="#milestones">MILESTONES</a><a href="https://github.com/Droid-Deck/DroidDeck" target="_blank" rel="noopener">GITHUB ↗</a></div><div class="signal" id="signal"><i></i><span id="signal-text">CONNECTING</span></div></nav></header>
+<main id="top">
+<section class="hero shell"><div class="eyebrow">✦ TWO REPOS · ONE EPIC FINISH LINE ✦</div><h1 class="pixel hero-title">THE GREAT<br>STAR RACE!</h1><p class="intro"><strong>DROIDDECK vs WINLATOR</strong> — The GitHub showdown you didn't know you needed. Who's crossing the finish line first?</p>
+<div id="race" class="marquise"><div class="sky-caption">★ <span>THE FINAL STRETCH</span> ★</div><div class="finishtag pixel"><strong>20,000</strong><br>★ FINISH LINE ★</div><canvas id="racetrack" width="640" height="245" role="img" aria-label="Pixel-art racing cars showing DroidDeck and Winlator near the 20,000-star finish line"></canvas></div>
+<div class="race-ribbon"><span class="star">★</span><span id="race-ribbon-text">DROIDDECK IS CLOSING IN!</span><span class="star">★</span></div>
+<div id="standings" class="scoreboard">
+<div class="tile pink"><div class="tile-label"><span class="icon">▣</span>DroidDeck</div><div class="tile-value"><span id="dd-count">19,928</span><span class="suffix"> ★</span></div><div class="tile-note" id="dd-note">THE CHALLENGER · PINK TEAM</div></div>
+<div class="tile blue"><div class="tile-label"><span class="icon">◈</span>Winlator</div><div class="tile-value"><span id="win-count">19,959</span><span class="suffix"> ★</span></div><div class="tile-note">THE VETERAN · BLUE TEAM</div></div>
+<div class="tile yellow"><div class="tile-label"><span class="icon">⚡</span><span id="gap-label">THE GAP</span></div><div class="tile-value"><span id="gap-count">31</span><span class="suffix" id="gap-units"> ★</span></div><div class="tile-note" id="gap-note">NECK AND NECK!</div></div>
+</div>
+<div class="lower">
+<div class="panel"><h2><span class="gem">▦</span> LIVE STANDINGS <span style="color:#a99dc7;font-size:11px">/ 20K ★</span></h2>
+<div class="track-row"><span>🩵 WINLATOR</span><div class="bar"><div id="win-bar" class="fill win"></div></div><span id="win-percent" class="right-val">99.80%</span></div>
+<div class="track-row"><span>💗 DROIDDECK</span><div class="bar"><div id="dd-bar" class="fill dd"></div></div><span id="dd-percent" class="right-val">99.64%</span></div>
+<div class="panel-footer">↻ AUTO-REFRESH EVERY 60 SECONDS <span style="color:var(--gold)">•</span> <span id="countdown">NEXT UPDATE IN 60S</span><br><span id="updated" aria-live="polite">Checking GitHub...</span></div>
+</div>
+<div class="panel forecast"><div><h2><span class="gem">🏁</span> PROJECTED OVERTAKE</h2><div class="big" id="forecast">CALCULATING...</div><p id="forecast-note">Based on each project's observed star growth.</p></div><div class="detail" id="forecast-detail">Comparing the latest counts against November 11.</div></div>
+</div>
+<div class="middle">
+<div class="panel mini"><div class="key">DroidDeck pace</div><div class="amount accent" id="dd-pace">— / day</div><div class="sub" id="pace-window">Since Nov 11 snapshot</div></div>
+<div class="panel mini"><div class="key">Net closing speed</div><div class="amount" id="net-pace">— / day</div><div class="sub">DroidDeck minus Winlator growth</div></div>
+<div class="panel mini"><div class="key">Stars until 20K</div><div class="amount" id="to-20k">72 ★</div><div class="sub">DroidDeck's next big milestone</div></div>
+</div>
+<div id="milestones" class="panel timeline"><h2><span class="gem">🏆</span> THE ROAD TO 20,000 STARS</h2><div class="mile"><div class="point done"><div class="dot"></div>19,000 ★<small>UNLOCKED</small></div><div class="point done"><div class="dot"></div>19,500 ★<small>UNLOCKED</small></div><div class="point current" id="point-current"><div class="dot"></div>THE CHASE<small>RIGHT NOW!</small></div><div class="point" id="point-end"><div class="dot"></div>20,000 ★<small>THE FINISH</small></div></div></div>
+<div class="footer"><div>Made for the open-source community. Unofficial fan project.<br>Data: <a href="https://github.com/Droid-Deck/DroidDeck" target="_blank" rel="noopener">DroidDeck</a> & <a href="https://github.com/brunodev85/winlator" target="_blank" rel="noopener">Winlator</a> via GitHub's public API.</div><div class="actions"><button id="music" class="btn">♫ PLAY FANFARE</button><button id="share" class="btn">↗ SHARE RACE</button><button id="refresh" class="btn main">↻ REFRESH NOW</button></div></div>
+</section></main>
+<script>
+'use strict';
+const $=id=>document.getElementById(id),fmt=n=>Number(n).toLocaleString('en-US');
+const SEED={dd:19928,win:19959},BASE={dd:19365,win:19912,date:new Date('2026-11-11T12:48:00-05:00')};
+const API='https://api.github.com/search/repositories?q='+encodeURIComponent('DroidDeck OR winlator in:name')+'&per_page=100';
+const state={dd:SEED.dd,win:SEED.win,last:0,next:0,loading:false,ok:false,fromSeed:true,won:false,twenty:false};
+const msDay=86400000;const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+let audioContext;
+function render(){
+ const dd=state.dd,win=state.win,diff=dd-win,abs=Math.abs(diff),now=Date.now(),elapsed=Math.max((now-BASE.date.getTime())/msDay,.25);
+ const dpace=(dd-BASE.dd)/elapsed,wpace=(win-BASE.win)/elapsed,net=dpace-wpace;
+ $('dd-count').textContent=fmt(dd);$('win-count').textContent=fmt(win);
+ $('gap-count').textContent=fmt(abs);$('gap-label').textContent=diff>0?'DROIDDECK LEADS':diff===0?'PHOTO FINISH':'THE GAP';
+ $('gap-note').textContent=diff>0?'DROIDDECK TAKES THE LEAD!':diff===0?'TIED FOR FIRST!':abs<150?'NECK AND NECK!':'THE CHASE IS ON!';
+ $('gap-units').textContent=' ★';$('dd-note').textContent=diff>0?'THE NEW LEADER · PINK TEAM':'THE CHALLENGER · PINK TEAM';
+ $('dd-bar').style.width=Math.min(dd/20000*100,100)+'%';$('win-bar').style.width=Math.min(win/20000*100,100)+'%';
+ $('dd-percent').textContent=(dd/20000*100).toFixed(2)+'%';$('win-percent').textContent=(win/20000*100).toFixed(2)+'%';
+ $('to-20k').textContent=dd>=20000?'UNLOCKED!':fmt(20000-dd)+' ★';
+ $('dd-pace').textContent=(dpace>=0?'+':'')+Math.round(dpace)+'/day';
+ $('net-pace').textContent=(net>=0?'+':'')+Math.round(net)+'/day';
+ $('race-ribbon-text').textContent=diff>0?'DROIDDECK TAKES THE CROWN!':diff===0?'IT’S A PHOTO FINISH!':'DROIDDECK IS CLOSING IN!';
+ $('point-current').innerHTML='<div class="dot"></div>'+(diff>0?'CROWNED ★':'THE CHASE')+'<small>'+(diff>0?'LEADING!':'RIGHT NOW!')+'</small>';
+ if(dd>=20000){$('point-end').classList.add('done');$('point-end').innerHTML='<div class="dot"></div>20,000 ★<small>UNLOCKED!</small>'}
+ else{$('point-end').classList.remove('done');$('point-end').innerHTML='<div class="dot"></div>20,000 ★<small>THE FINISH</small>'}
+ let line,detail;
+ if(diff>0){line='DROIDDECK WON!';detail=fmt(diff)+' stars ahead. The underdog has overtaken Winlator.'}
+ else if(diff===0){line='PHOTO FINISH!';detail='The repositories are currently tied.'}
+ else if(net>1){const hours=abs/net*24;const date=new Date(now+hours*3600000);line=hours<24?'IN ~'+Math.max(1,Math.round(hours))+' HOURS':date.toLocaleDateString('en-US',{month:'short',day:'numeric'}).toUpperCase();detail='At a net gain of ~'+Math.round(net)+' stars/day. Forecast: '+date.toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})+'.';}
+ else{line='TOO CLOSE TO CALL';detail='Current observed growth is not closing the gap.'}
+ $('forecast').textContent=line;$('forecast-note').textContent=detail;
+ $('forecast-detail').textContent='Pace uses the Nov 11 snapshot. '+Math.round(dpace)+' vs '+Math.round(wpace)+' stars/day; projections are not guarantees.';
+ $('pace-window').textContent='Average since Nov 11 snapshot';
+ if(state.ok && !state.fromSeed){$('updated').textContent='LAST VERIFIED '+new Date(state.last).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',second:'2-digit'})+' · GITHUB API';}
+}
+function signal(live,label){$('signal').classList.toggle('stale',!live);$('signal-text').textContent=label}
+async function refresh(manual=false){
+ if(state.loading)return;
+ if(!manual && document.hidden)return;
+ state.loading=true;$('refresh').disabled=true;$('refresh').classList.add('updating');signal(false,'SYNCING...');
+ try{
+  const res=await fetch(API+'&_='+Math.floor(Date.now()/60000),{cache:'no-store',headers:{Accept:'application/vnd.github+json'}});
+  if(!res.ok)throw new Error('GitHub returned HTTP '+res.status+(res.status===403||res.status===429?' (rate limited)':''));
+  const data=await res.json(),items=data.items||[];
+  const dd=items.find(x=>x.full_name==='Droid-Deck/DroidDeck'),win=items.find(x=>x.full_name==='brunodev85/winlator');
+  if(!dd||!win||!Number.isFinite(dd.stargazers_count)||!Number.isFinite(win.stargazers_count))throw new Error('Repositories missing from GitHub response');
+  const wasBehind=state.dd<=state.win,wasUnder=state.dd<20000;
+  state.dd=dd.stargazers_count;state.win=win.stargazers_count;state.last=Date.now();state.ok=true;state.fromSeed=false;
+  signal(true,'LIVE');render();
+  if(wasBehind&&state.dd>state.win&&!sessionStorage.getItem('crossoverShown')){sessionStorage.setItem('crossoverShown','1');celebrate('DROIDDECK WINS!','It just overtook Winlator in GitHub stars. What a finish!')}
+  if(wasUnder&&state.dd>=20000&&!sessionStorage.getItem('twentyShown')){sessionStorage.setItem('twentyShown','1');celebrate('20,000 STARS!','DroidDeck has officially entered the 20K club!')}
+ }catch(e){signal(false,'DATA DELAYED');$('updated').textContent='UPDATE FAILED: '+e.message+'. Showing '+(state.fromSeed?'last known snapshot.':'last verified count.');console.warn(e)}
+ finally{state.next=Date.now()+60000;state.loading=false;$('refresh').disabled=false;$('refresh').classList.remove('updating');}
+}
+function tick(){let seconds=Math.max(0,Math.ceil((state.next-Date.now())/1000));$('countdown').textContent='NEXT UPDATE IN '+seconds+'S'}
+setInterval(()=>{tick();if(Date.now()>=state.next&&!state.loading)refresh()},1000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&Date.now()>state.next)refresh()});
+$('refresh').addEventListener('click',()=>refresh(true));
+$('share').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(location.href);$('share').textContent='✓ LINK COPIED';setTimeout(()=>$('share').textContent='↗ SHARE RACE',1800)}catch(e){prompt('Copy this link:',location.href)}});
+$('close-banner').addEventListener('click',()=>{$('announcement').style.display='none'});
+function fanfare(){
+ try{
+  audioContext=audioContext||new (window.AudioContext||window.webkitAudioContext)();
+  if(audioContext.state==='suspended')audioContext.resume();
+  const notes=[[392,0,.11],[523,.13,.11],[659,.26,.11],[784,.4,.16],[659,.61,.1],[784,.74,.12],[1046,.9,.42],[784,1.42,.12],[1046,1.56,.42]];
+  const start=audioContext.currentTime+.03;
+  for(const [hz,delay,dur] of notes){const osc=audioContext.createOscillator(),gain=audioContext.createGain();osc.type='square';osc.frequency.setValueAtTime(hz,start+delay);gain.gain.setValueAtTime(.0001,start+delay);gain.gain.exponentialRampToValueAtTime(.07,start+delay+.01);gain.gain.exponentialRampToValueAtTime(.0001,start+delay+dur);osc.connect(gain).connect(audioContext.destination);osc.start(start+delay);osc.stop(start+delay+dur+.03)}
+ }catch(e){console.warn('Audio unavailable',e)}
+}
+$('music').addEventListener('click',()=>{fanfare();burst()});
+function celebrate(title,message){$('announce-title').textContent=title;$('announce-body').textContent=message;$('announcement').style.display='block';burst();if(!reduced)fanfare()}
+const party=$('celebration'),pctx=party.getContext('2d');let particles=[],lastPartyFrame=0;
+function burst(){party.style.display='block';party.width=innerWidth;party.height=innerHeight;particles=Array.from({length:170},()=>({x:Math.random()*party.width,y:-Math.random()*party.height*.4-20,vx:(Math.random()-.5)*3,vy:Math.random()*2+1,rot:Math.random()*6,vr:(Math.random()-.5)*.2,h:Math.random()*360,life:200+Math.random()*100}));if(!reduced)requestAnimationFrame(partyFrame);else{party.style.display='none'}}
+function partyFrame(t){const dt=Math.min((t-lastPartyFrame)/16.7||1,2);lastPartyFrame=t;pctx.clearRect(0,0,party.width,party.height);particles=particles.filter(p=>p.life>0&&p.y<party.height+20);for(const p of particles){p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=.024*dt;p.rot+=p.vr*dt;p.life-=dt;pctx.save();pctx.translate(p.x,p.y);pctx.rotate(p.rot);pctx.fillStyle='hsl('+p.h+' 100% 65%)';pctx.fillRect(-5,-3,10,6);pctx.restore()}if(particles.length)requestAnimationFrame(partyFrame);else party.style.display='none'}
+const canvas=$('racetrack'),cx=canvas.getContext('2d');cx.imageSmoothingEnabled=false;let frame=0;
+function rect(x,y,w,h,color){cx.fillStyle=color;cx.fillRect(Math.round(x),Math.round(y),Math.round(w),Math.round(h))}
+function poly(coords,color){cx.fillStyle=color;cx.beginPath();cx.moveTo(coords[0][0],coords[0][1]);for(let i=1;i<coords.length;i++)cx.lineTo(coords[i][0],coords[i][1]);cx.closePath();cx.fill()}
+function star(x,y,color='#fff6cb'){rect(x-1,y,3,1,color);rect(x,y-1,1,3,color)}
+function firework(x,y,r,t,hue){const phase=(t*.025+x)%6.28;for(let i=0;i<12;i++){let a=i*Math.PI/6,rr=(Math.sin(phase)*.1+1)*r;rect(x+Math.cos(a)*rr,y+Math.sin(a)*rr,2,2,i%2?'#fff4b0':hue)}}
+function car(x,y,pink,t){const p=pink?'#ff4388':'#37b7ff',shine=pink?'#ff9bba':'#b0f3ff',dark=pink?'#a32261':'#1762a5';const bob=Math.round(Math.sin(t*.09+(pink?0:1.8))*1);
+ x=Math.round(x);y=Math.round(y)+bob;
+ rect(x+4,y+16,58,11,'#170d30');rect(x+7,y+12,51,12,p);rect(x+17,y+4,27,14,dark);rect(x+22,y+6,18,7,shine);rect(x+2,y+17,6,5,shine);rect(x+51,y+16,10,4,shine);rect(x+9,y+24,13,9,'#0b0d22');rect(x+43,y+24,13,9,'#0b0d22');rect(x+12,y+27,7,3,'#c7b8e9');rect(x+46,y+27,7,3,'#c7b8e9');rect(x+26,y+19,11,4,'#ffffff');rect(x+6,y+9,5,6,dark);rect(x+2,y+7,12,4,p);
+ rect(x-10+Math.sin(t*.08)*3,y+23,6,3,'#e5deff');rect(x-18+Math.sin(t*.08+2)*3,y+21,4,2,'#aaa6df');
+}
+function paint(t){
+ frame=t||0;const tm=reduced?0:t*.04;
+ const gradient=cx.createLinearGradient(0,0,0,165);gradient.addColorStop(0,'#302068');gradient.addColorStop(.54,'#a55096');gradient.addColorStop(1,'#ffab87');cx.fillStyle=gradient;cx.fillRect(0,0,640,245);
+ // pixel clouds
+ for(let i=0;i<12;i++){let x=((i*79+tm*.07)%760)-65,y=20+i%4*22;rect(x,y,47,9,'#d578bc');rect(x+8,y-5,34,7,'#ec8dca');rect(x-8,y+8,70,7,'#7f4c9b')}
+ rect(526,81,68,7,'#ffde8d');rect(531,72,58,9,'#ffdb77');rect(538,63,44,10,'#fff0a9');rect(547,55,26,8,'#fff4bb');
+ for(let i=0;i<44;i++){let x=(i*149)%640,y=(i*31)%104;star(x,y,i%3?'#ffd0f3':'#fff5b9')}
+ firework(94,57,22,tm,'#65d6ff');firework(472,34,17,tm+100,'#ffdf78');firework(585,80,13,tm+200,'#fbb3fc');
+ poly([[0,130],[44,91],[78,117],[112,88],[170,130],[206,99],[262,129],[302,83],[369,132],[430,100],[480,132],[530,98],[600,132],[640,107],[640,174],[0,174]],'#513b91');
+ poly([[0,151],[62,113],[119,153],[177,118],[230,154],[300,107],[356,148],[438,113],[498,152],[567,110],[640,150],[640,177],[0,177]],'#392965');
+ for(let i=0;i<31;i++){let x=i*22+((tm*.03)%22);rect(x,144-i%3*4,7,26,'#1d294d');rect(x-5,140-i%3*4,17,5,'#1d294d')}
+ rect(0,171,640,74,'#353458');rect(0,183,640,54,'#3d3762');rect(0,171,640,5,'#e7badb');
+ for(let i=0;i<50;i++){let x=((i*32-tm*2)%720+720)%720;rect(x,208,21,4,'#f7d3bf');rect(x,228,21,3,'#ffe5ca')}
+ // finish-line pixels
+ for(let row=0;row<5;row++)for(let col=0;col<2;col++){rect(563+col*10,174+row*10,10,10,(row+col)%2?'#130d2a':'#f0f0ff')}
+ rect(557,167,32,7,'#fff1b2');rect(558,217,30,5,'#f7cb77');
+ // flags, spectators
+ for(let i=0;i<25;i++){let x=i*28+((tm*.1)%28);rect(x,158,3,14,'#3b234e');poly([[x,159],[x+10,161],[x+2,167]],i%2?'#ffd16d':'#fe70a8')}
+ const difference=state.dd-state.win,delta=Math.max(-200,Math.min(200,difference*.52));
+ let xposD=407+delta/2,xposW=407-delta/2;
+ // subtle movement independent of star counts
+ car(xposW,173,false,tm);car(xposD,205,true,tm+10);
+ rect(5,232,640,13,'#8a4186');for(let i=0;i<45;i++)rect(i*16,232,8,6,'#f5bad7');
+}
+let animationLast=0;
+function animate(t){if(t-animationLast>33||!animationLast){paint(t);animationLast=t}if(!reduced)requestAnimationFrame(animate)}
+render();state.next=Date.now()+60000;tick();refresh();if(reduced)paint(0);else requestAnimationFrame(animate);
+</script>
+</body></html>
