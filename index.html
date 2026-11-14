@@ -66,7 +66,7 @@ canvas#racetrack{display:block;width:100%;aspect-ratio:640 / 245;min-height:230p
 'use strict';
 const $=id=>document.getElementById(id),fmt=n=>Number(n).toLocaleString('en-US');
 const SEED={dd:19928,win:19959},BASE={dd:19365,win:19912,date:new Date('2026-11-11T12:48:00-05:00')};
-const API='https://api.github.com/search/repositories?q='+encodeURIComponent('DroidDeck OR winlator in:name')+'&per_page=100';
+const API='https://api.github.com/search/repositories?q='+encodeURIComponent('DroidDeck OR winlator in:name stars:>10000')+'&per_page=30';
 const state={dd:SEED.dd,win:SEED.win,last:0,next:0,loading:false,ok:false,fromSeed:true,won:false,twenty:false};
 const msDay=86400000;const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
 let audioContext;
